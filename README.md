@@ -64,36 +64,6 @@ The datasets are updated daily and were filtered for the last decade, specifical
 
 ---
 
-## V. RESULTS
-
-### Top Emergency Types
-
-![Top 10 Call Types](link_to_image)
-
-Medical and fire alarms are the most common types of incidents.
-
-### Temporal Trends in Fire and Medical Emergencies
-
-- Yearly trends show a dip in the year 2020-21 due to COVID-19 data exclusion.
-- Monthly trends reveal more fire emergencies in winter months due to seasonal factors like heating and holiday decorations.
-
-![Yearly Trend](link_to_image)
-![Monthly Trend Fire](link_to_image)
-![Monthly Trend Medical](link_to_image)
-
-### Life-Threatening Incidents by Region
-
-The northeast region of San Francisco exhibits a higher proportion of life-threatening incidents, influenced by factors like high population density and limited accessibility.
-
-![Life-Threatening Incidents](link_to_image)
-
-### Average Response Time by Neighborhood
-
-We mapped the average response times for each neighborhood and analyzed resource allocation for high-incident areas.
-
-![Response Time by Neighborhood](link_to_image)
-
----
 
 ## VI. FUTURE WORK
 
