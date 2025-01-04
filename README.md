@@ -45,8 +45,6 @@ Our project builds upon these works by integrating multiple datasets to provide 
 
 ### A. Design Details
 
-![Design Flow](link_to_image)
-
 Our project follows a systematic approach to process and analyze emergency response data from San Francisco. The design consists of multiple stages, from data ingestion to visualization, leveraging big data technologies for efficient processing.
 
 1. **Data Ingestion and Storage**: Three primary datasets from SF.GOV are ingested into HDFS.
