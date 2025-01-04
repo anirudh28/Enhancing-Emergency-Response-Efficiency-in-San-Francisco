@@ -1,0 +1,482 @@
+################## Fire Emergency Neighbourhood ################################
+
+WITH fire_inc_no AS (
+    SELECT 
+        "incident_number"
+    FROM 
+        fire
+),
+fire_ctg AS (
+    SELECT 
+        "incident_number",
+        "zipcode_of_incident",
+        "call_type_group",
+        "neighborhooods_analysis_boundaries"
+    FROM 
+        fire_medical
+),
+fire_loc AS (
+    SELECT DISTINCT
+        fc."incident_number",
+        fc."zipcode_of_incident",
+        fc."call_type_group",
+        fc."neighborhooods_analysis_boundaries"
+    FROM 
+        fire_ctg fc
+    INNER JOIN 
+        fire_inc_no fi
+    ON 
+        fc."incident_number" = fi."incident_number"
+    WHERE 
+        fc."zipcode_of_incident" IS NOT NULL 
+        AND fc."call_type_group" IS NOT NULL 
+        AND fc."neighborhooods_analysis_boundaries" IS NOT NULL
+)
+SELECT 
+    "neighborhooods_analysis_boundaries",
+    COUNT(*) AS "Count"
+FROM 
+    fire_loc
+GROUP BY 
+    "neighborhooods_analysis_boundaries";
+
+##################### Potentially Life Threatening Neighbourhood #######################
+
+WITH fire_lt_raw AS (
+    SELECT DISTINCT
+        "incident_number",
+        "zipcode_of_incident",
+        "call_type_group",
+        "neighborhooods_analysis_boundaries"
+    FROM 
+        fire_medical
+),
+fire_lt_filtered AS (
+    SELECT 
+        "incident_number",
+        "zipcode_of_incident",
+        "neighborhooods_analysis_boundaries"
+    FROM 
+        fire_lt_raw
+    WHERE 
+        "call_type_group" = 'Potentially Life-Threatening'
+        AND "zipcode_of_incident" IS NOT NULL
+        AND "neighborhooods_analysis_boundaries" IS NOT NULL
+)
+SELECT 
+    "neighborhooods_analysis_boundaries" AS "neighbourhood",
+    COUNT(*) AS "Count"
+FROM 
+    fire_lt_filtered
+GROUP BY 
+    "neighborhooods_analysis_boundaries";
+
+
+################################### Medical Yearly ##############################################
+
+WITH fire_medical_dates AS (
+    SELECT 
+        "incident_number",
+        "call_date"
+    FROM 
+        fire_medical
+),
+fire_inc_no AS (
+    SELECT 
+        "incident_number"
+    FROM 
+        fire
+),
+fire_dates AS (
+    SELECT DISTINCT
+        fmd."incident_number",
+        fmd."call_date",
+        SUBSTRING(fmd."call_date", 1, 4) AS "Year",
+        SUBSTRING(fmd."call_date", 5, 2) AS "Month"
+    FROM 
+        fire_medical_dates fmd
+    INNER JOIN 
+        fire_inc_no fi
+    ON 
+        fmd."incident_number" = fi."incident_number"
+    WHERE 
+        SUBSTRING(fmd."call_date", 1, 4) != '2024'
+),
+medical_inc_no AS (
+    SELECT 
+        "incident_number" AS "incident_number"
+    FROM 
+        medical
+),
+medical_dates AS (
+    SELECT DISTINCT
+        fmd."incident_number",
+        fmd."call_date",
+        SUBSTRING(fmd."call_date", 1, 4) AS "Year",
+        SUBSTRING(fmd."call_date", 5, 2) AS "Month"
+    FROM 
+        fire_medical_dates fmd
+    INNER JOIN 
+        medical_inc_no mi
+    ON 
+        fmd."incident_number" = mi."incident_number"
+    WHERE 
+        SUBSTRING(fmd."call_date", 1, 4) != '2024'
+),
+medical_yearly_trend AS (
+    SELECT 
+        "Year",
+        COUNT(*) AS "Count"
+    FROM 
+        medical_dates
+    GROUP BY 
+        "Year"
+),
+medical_monthly_trend AS (
+    SELECT 
+        "Month",
+        COUNT(*) AS "Count"
+    FROM 
+        medical_dates
+    GROUP BY 
+        "Month"
+)
+SELECT * FROM medical_yearly_trend
+
+################################### Medical Monthly ##############################################
+
+WITH fire_medical_dates AS (
+    SELECT 
+        "incident_number",
+        "call_date"
+    FROM 
+        fire_medical
+),
+fire_inc_no AS (
+    SELECT 
+        "incident_number"
+    FROM 
+        fire
+),
+fire_dates AS (
+    SELECT DISTINCT
+        fmd."incident_number",
+        fmd."call_date",
+        SUBSTRING(fmd."call_date", 1, 4) AS "Year",
+        SUBSTRING(fmd."call_date", 5, 2) AS "Month"
+    FROM 
+        fire_medical_dates fmd
+    INNER JOIN 
+        fire_inc_no fi
+    ON 
+        fmd."incident_number" = fi."incident_number"
+    WHERE 
+        SUBSTRING(fmd."call_date", 1, 4) != '2024'
+),
+medical_inc_no AS (
+    SELECT 
+        "incident_number" AS "incident_number"
+    FROM 
+        medical
+),
+medical_dates AS (
+    SELECT DISTINCT
+        fmd."incident_number",
+        fmd."call_date",
+        SUBSTRING(fmd."call_date", 1, 4) AS "Year",
+        SUBSTRING(fmd."call_date", 5, 2) AS "Month"
+    FROM 
+        fire_medical_dates fmd
+    INNER JOIN 
+        medical_inc_no mi
+    ON 
+        fmd."incident_number" = mi."incident_number"
+    WHERE 
+        SUBSTRING(fmd."call_date", 1, 4) != '2024'
+),
+medical_yearly_trend AS (
+    SELECT 
+        "Year",
+        COUNT(*) AS "Count"
+    FROM 
+        medical_dates
+    GROUP BY 
+        "Year"
+),
+medical_monthly_trend AS (
+    SELECT 
+        "Month",
+        COUNT(*) AS "Count"
+    FROM 
+        medical_dates
+    GROUP BY 
+        "Month"
+)
+SELECT * FROM medical_monthly_trend;
+
+
+
+################################### Fire Yearly ##############################################
+
+WITH fire_medical_dates AS (
+    SELECT 
+        "incident_number",
+        "call_date"
+    FROM 
+        fire_medical
+),
+fire_inc_no AS (
+    SELECT 
+        "incident_number"
+    FROM 
+        fire
+),
+fire_dates AS (
+    SELECT DISTINCT
+        fmd."incident_number",
+        fmd."call_date",
+        SUBSTRING(fmd."call_date", 1, 4) AS "Year",
+        SUBSTRING(fmd."call_date", 5, 2) AS "Month"
+    FROM 
+        fire_medical_dates fmd
+    INNER JOIN 
+        fire_inc_no fi
+    ON 
+        fmd."incident_number" = fi."incident_number"
+    WHERE 
+        SUBSTRING(fmd."call_date", 1, 4) != '2024'
+),
+yearly_trend AS (
+    SELECT 
+        "Year",
+        COUNT(*) AS "Count"
+    FROM 
+        fire_dates
+    GROUP BY 
+        "Year"
+),
+monthly_trend AS (
+    SELECT 
+        "Month",
+        COUNT(*) AS "Count"
+    FROM 
+        fire_dates
+    GROUP BY 
+        "Month"
+)
+SELECT * FROM yearly_trend;
+
+################################### Fire Monthly ##############################################
+
+WITH fire_medical_dates AS (
+    SELECT 
+        "incident_number",
+        "call_date"
+    FROM 
+        fire_medical
+),
+fire_inc_no AS (
+    SELECT 
+        "incident_number"
+    FROM 
+        fire
+),
+fire_dates AS (
+    SELECT DISTINCT
+        fmd."incident_number",
+        fmd."call_date",
+        SUBSTRING(fmd."call_date", 1, 4) AS "Year",
+        SUBSTRING(fmd."call_date", 5, 2) AS "Month"
+    FROM 
+        fire_medical_dates fmd
+    INNER JOIN 
+        fire_inc_no fi
+    ON 
+        fmd."incident_number" = fi."incident_number"
+    WHERE 
+        SUBSTRING(fmd."call_date", 1, 4) != '2024'
+),
+yearly_trend AS (
+    SELECT 
+        "Year",
+        COUNT(*) AS "Count"
+    FROM 
+        fire_dates
+    GROUP BY 
+        "Year"
+),
+monthly_trend AS (
+    SELECT 
+        "Month",
+        COUNT(*) AS "Count"
+    FROM 
+        fire_dates
+    GROUP BY 
+        "Month"
+)
+SELECT * FROM monthly_trend
+
+############################## Type of Alarms #################################
+
+WITH fire_inc_no AS (
+    SELECT 
+        "incident_number"
+    FROM 
+        fire
+),
+fire_ctg AS (
+    SELECT 
+        "incident_number",
+        "zipcode_of_incident",
+        "call_type_group",
+        "neighborhooods_analysis_boundaries"
+    FROM 
+        fire_medical
+),
+fire_loc AS (
+    SELECT DISTINCT
+        fc."incident_number",
+        fc."zipcode_of_incident",
+        fc."call_type_group",
+        fc."neighborhooods_analysis_boundaries"
+    FROM 
+        fire_ctg fc
+    INNER JOIN 
+        fire_inc_no fi
+    ON 
+        fc."incident_number" = fi."incident_number"
+    WHERE 
+        fc."zipcode_of_incident" IS NOT NULL 
+        AND fc."call_type_group" IS NOT NULL 
+        AND fc."neighborhooods_analysis_boundaries" IS NOT NULL
+)
+SELECT 
+    "call_type_group",
+    COUNT(*) AS "Count"
+FROM 
+    fire_loc
+GROUP BY 
+    "call_type_group";
+
+################### Fire Emergency Zipcode ##################################
+
+WITH fire_inc_no AS (
+    SELECT 
+        "incident_number"
+    FROM 
+        fire
+),
+fire_ctg AS (
+    SELECT 
+        "incident_number",
+        "zipcode_of_incident",
+        "call_type_group",
+        "neighborhooods_analysis_boundaries"
+    FROM 
+        fire_medical
+),
+fire_loc AS (
+    SELECT DISTINCT
+        fc."incident_number",
+        fc."zipcode_of_incident",
+        fc."call_type_group",
+        fc."neighborhooods_analysis_boundaries"
+    FROM 
+        fire_ctg fc
+    INNER JOIN 
+        fire_inc_no fi
+    ON 
+        fc."incident_number" = fi."incident_number"
+    WHERE 
+        fc."zipcode_of_incident" IS NOT NULL 
+        AND fc."call_type_group" IS NOT NULL 
+        AND fc."neighborhooods_analysis_boundaries" IS NOT NULL
+)
+SELECT 
+    "zipcode_of_incident" AS "zipcode",
+    COUNT(*) AS "Count"
+FROM 
+    fire_loc
+GROUP BY 
+    "zipcode_of_incident";
+
+##################### Potentially Life Threatening Zipcode #######################
+
+WITH fire_lt_raw AS (
+    SELECT DISTINCT
+        "incident_number",
+        "zipcode_of_incident",
+        "call_type_group",
+        "neighborhooods_analysis_boundaries"
+    FROM 
+        fire_medical
+),
+fire_lt_filtered AS (
+    SELECT 
+        "incident_number",
+        "zipcode_of_incident",
+        "neighborhooods_analysis_boundaries"
+    FROM 
+        fire_lt_raw
+    WHERE 
+        "call_type_group" = 'Potentially Life-Threatening'
+        AND "zipcode_of_incident" IS NOT NULL
+        AND "neighborhooods_analysis_boundaries" IS NOT NULL
+)
+SELECT 
+    "zipcode_of_incident" AS "Zipcode",
+    COUNT(*) AS "Count"
+FROM 
+    fire_lt_filtered
+GROUP BY 
+    "zipcode_of_incident";
+
+################### Response Time by Neighborhood ##################################
+
+SELECT 
+    sc.neighborhoods_analysis_boundaries AS neighborhood, 
+    AVG(rd.response_time_min) AS avg_response_time
+FROM 
+    service_calls sc
+JOIN 
+    /*+ BROADCAST */ response_data rd
+ON 
+    sc.incident_number = rd.incident_number
+GROUP BY 
+    sc.neighborhoods_analysis_boundaries;
+
+
+################### Fire Incidents by Zipcode ##################################
+
+SELECT 
+    SUBSTR(zipcode, 1, 5) AS zipcode,
+    COUNT(*) AS incident_count
+FROM
+    fire_incidents
+WHERE
+    zipcode IS NOT NULL
+    AND zipcode != ''
+GROUP BY
+    SUBSTR(zipcode, 1, 5)
+ORDER BY
+    incident_count DESC;
+
+
+################### Fatalities/Injuries by Zipcode ##################################
+
+SELECT 
+    SUBSTR(zipcode, 1, 5) AS zipcode,
+    SUM(fire_fatalities) AS total_fire_fatalities,
+    SUM(fire_injuries) AS total_fire_injuries,
+    SUM(civilian_fatalities) AS total_civilian_fatalities,
+    SUM(civilian_injuries) AS total_civilian_injuries
+FROM 
+    fire_incidents
+WHERE 
+    zipcode IS NOT NULL 
+    AND zipcode != ''
+GROUP BY 
+    SUBSTR(zipcode, 1, 5)
+ORDER BY 
+    (SUM(fire_fatalities) + SUM(fire_injuries) + 
+    SUM(civilian_fatalities) + SUM(civilian_injuries)) DESC;

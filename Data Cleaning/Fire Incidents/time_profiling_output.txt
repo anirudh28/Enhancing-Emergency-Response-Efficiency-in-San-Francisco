@@ -1,0 +1,2 @@
+Response Time   Mean: 563251.86, StdDev: 4826612.46, Min: 0, Max: 518594000, Median: 279000.00
+Turnaround Time  Mean: 3384385.42, StdDev: 16631893.88, Min: 0, Max: 1475694000, Median: 1050000.00
