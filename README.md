@@ -5,7 +5,7 @@
 **Rhea Chandok**, Courant Institute of Mathematical Sciences, New York University, New York, USA  
 
 ## Abstract
-In this paper, we analyze and gain actionable insights into the efficiency of emergency response times and patterns related to fire incidents and emergency medical services (EMS) in San Francisco. Utilizing publicly available datasets on dispatched calls, fire incidents, and EMS response times, we conduct a comprehensive analysis to assess response efficiency, identify common emergency types, and uncover temporal patterns in incident frequency. The findings from this study provide valuable insights to assist public safety departments and policymakers in enhancing preparedness, optimizing resource allocation for emergency services in San Francisco, and helping residents avoid high-incident areas.
+In this project, we analyze and gain actionable insights into the efficiency of emergency response times and patterns related to fire incidents and emergency medical services (EMS) in San Francisco. Utilizing publicly available datasets on dispatched calls, fire incidents, and EMS response times, we conduct a comprehensive analysis to assess response efficiency, identify common emergency types, and uncover temporal patterns in incident frequency. The findings from this study provide valuable insights to assist public safety departments and policymakers in enhancing preparedness, optimizing resource allocation for emergency services in San Francisco, and helping residents avoid high-incident areas.
 
 **Keywords:** analytics, fire, calls, ems, response times, San Francisco
 
